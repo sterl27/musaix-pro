@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { color-scheme: dark; }
+  body {
+    background-color: #121414;
+    color: #e2e2e2;
+    font-family: Inter, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+  }
+  #root { min-height: 100svh; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #0A0A0A; }
+  ::-webkit-scrollbar-thumb { background: #333535; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #444748; }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+}
+
+@layer utilities {
+  .accent-coral { color: #FF5A36; }
+  .bg-accent-coral { background-color: #FF5A36; }
+  .border-accent-coral { border-color: #FF5A36; }
+  .ghost-border { border: 1px solid #282828; }
+  .active-glow { box-shadow: 0 0 15px -5px #FF5A36; }
+  .hero-gradient {
+    background: radial-gradient(circle at center, rgba(255,90,54,0.1) 0%, rgba(18,20,20,0) 70%);
+  }
+  .bento-card {
+    background-color: #121212;
+    border: 1px solid #282828;
+    transition: all 0.3s ease;
+  }
+  .bento-card:hover {
+    border-color: #444748;
+    background-color: #1e1e1e;
+  }
+}
