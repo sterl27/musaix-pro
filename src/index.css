@@ -27,6 +27,9 @@
 
 @layer utilities {
   .accent-coral { color: #FF5A36; }
+  .accent-neon-amber { color: #F59E0B; }
+  .accent-electric-violet { color: #8B5CF6; }
+  .accent-cyber-cyan { color: #38BDF8; }
   .bg-accent-coral { background-color: #FF5A36; }
   .border-accent-coral { border-color: #FF5A36; }
   .ghost-border { border: 1px solid #282828; }

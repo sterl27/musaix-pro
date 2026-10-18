@@ -2,12 +2,13 @@ import { NavLink } from 'react-router-dom'
 
 const navItems = [
   { to: '/dashboard',    icon: 'dashboard',               label: 'Dashboard' },
+  { to: '/resonance',    icon: 'graphic_eq',              label: 'Resonance' },
+  { to: '/coach',        icon: 'psychology',              label: 'Studio Coach' },
   { to: '/ecosystem',    icon: 'settings_input_component', label: 'Ecosystem' },
   { to: '/discover',     icon: 'music_note',              label: 'Discover' },
-  { to: '/production',   icon: 'graphic_eq',              label: 'Production' },
+  { to: '/production',   icon: 'tune',                    label: 'Production' },
   { to: '/security',     icon: 'security',                label: 'Security' },
   { to: '/settings',     icon: 'person',                  label: 'Account' },
-  { to: '/security/audit', icon: 'list_alt',              label: 'Logs' },
 ]
 
 export default function Sidebar() {

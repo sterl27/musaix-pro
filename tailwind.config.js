@@ -57,6 +57,11 @@ export default {
         'on-error-container': '#ffdad6',
         'brand-coral': '#FF5A36',
         'brand-ink': '#0A0A0A',
+        'neon-amber': '#F59E0B',
+        'electric-violet': '#8B5CF6',
+        'cyber-cyan': '#38BDF8',
+        'surface-midnight': '#131722',
+        'surface-elevated': '#1A1F2E',
       },
       borderRadius: {
         DEFAULT: '0.125rem',
