@@ -34,22 +34,20 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   const cors = corsHeaders(origin)
-  const json = (body: unknown, status: number) =>
+  const err = (body: unknown, status: number) =>
     new Response(JSON.stringify(body), {
       status,
       headers: { 'Content-Type': 'application/json', ...cors },
     })
 
   const apiKey = process.env.XAI_API_KEY
-  if (!apiKey) {
-    return json({ error: 'XAI_API_KEY not configured' }, 503)
-  }
+  if (!apiKey) return err({ error: 'XAI_API_KEY not configured' }, 503)
 
   let body: { message?: string; history?: ChatMessage[] }
   try {
     body = await req.json() as { message?: string; history?: ChatMessage[] }
   } catch {
-    return json({ error: 'Invalid JSON body' }, 400)
+    return err({ error: 'Invalid JSON body' }, 400)
   }
 
   const { message = '', history = [] } = body
@@ -74,21 +72,25 @@ export default async function handler(req: Request): Promise<Response> {
         ],
         max_tokens: 400,
         temperature: 0.7,
+        stream: true,
       }),
     })
 
-    if (!xaiRes.ok) {
+    if (!xaiRes.ok || !xaiRes.body) {
       const detail = await xaiRes.text()
-      return json({ error: `xAI ${xaiRes.status}`, detail }, 502)
+      return err({ error: `xAI ${xaiRes.status}`, detail }, 502)
     }
 
-    const data = await xaiRes.json() as {
-      choices: Array<{ message: { content: string } }>
-    }
-    const reply = data.choices[0]?.message?.content ?? '(empty response)'
-
-    return json({ reply }, 200)
+    return new Response(xaiRes.body, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'X-Accel-Buffering': 'no',
+        ...cors,
+      },
+    })
   } catch (e) {
-    return json({ error: String(e) }, 500)
+    return err({ error: String(e) }, 500)
   }
 }

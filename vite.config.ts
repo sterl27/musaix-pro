@@ -44,24 +44,34 @@ function coachApiPlugin(apiKey: string): Plugin {
               ],
               max_tokens: 400,
               temperature: 0.7,
+              stream: true,
             }),
           })
 
-          if (!xaiRes.ok) {
+          if (!xaiRes.ok || !xaiRes.body) {
             const err = await xaiRes.text()
             res.writeHead(502, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify({ error: `xAI ${xaiRes.status}`, detail: err }))
             return
           }
 
-          const data = await xaiRes.json() as {
-            choices: Array<{ message: { content: string } }>
+          res.writeHead(200, {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'X-Accel-Buffering': 'no',
+            Connection: 'keep-alive',
+          })
+
+          const reader = xaiRes.body.getReader()
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) { res.end(); break }
+            res.write(value)
           }
-          const reply = data.choices[0]?.message?.content ?? '(empty response)'
-          res.writeHead(200, { 'Content-Type': 'application/json' })
-          res.end(JSON.stringify({ reply }))
         } catch (e) {
-          res.writeHead(500, { 'Content-Type': 'application/json' })
+          if (!res.headersSent) {
+            res.writeHead(500, { 'Content-Type': 'application/json' })
+          }
           res.end(JSON.stringify({ error: String(e) }))
         }
       })

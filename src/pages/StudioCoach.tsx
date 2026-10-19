@@ -87,7 +87,8 @@ export default function StudioCoach() {
     if (!msg || isLoading) return
 
     const userMsg: Message = { id: Date.now().toString(), role: 'user', content: msg }
-    setMessages(m => [...m, userMsg])
+    const replyId = `${Date.now()}-reply`
+    setMessages(m => [...m, userMsg, { id: replyId, role: 'assistant', content: '' }])
     setInput('')
     setIsLoading(true)
 
@@ -97,22 +98,44 @@ export default function StudioCoach() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: `[mode:${mode}] ${msg}`, history: messages }),
       })
-      if (!resp.ok) throw new Error('offline')
-      const data = await resp.json() as { reply: string }
-      setMessages(m => [
-        ...m,
-        { id: (Date.now() + 1).toString(), role: 'assistant', content: data.reply },
-      ])
+      if (!resp.ok || !resp.body) throw new Error('offline')
+
+      const reader = resp.body.getReader()
+      const decoder = new TextDecoder()
+
+      outer: while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        for (const line of decoder.decode(value, { stream: true }).split('\n')) {
+          if (!line.startsWith('data: ')) continue
+          const payload = line.slice(6)
+          if (payload === '[DONE]') break outer
+          try {
+            const token = (
+              JSON.parse(payload) as {
+                choices: Array<{ delta: { content?: string } }>
+              }
+            ).choices[0]?.delta?.content
+            if (token) {
+              setMessages(m =>
+                m.map(m2 => (m2.id === replyId ? { ...m2, content: m2.content + token } : m2)),
+              )
+            }
+          } catch { /* skip malformed chunk */ }
+        }
+      }
     } catch {
-      setMessages(m => [
-        ...m,
-        {
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content:
-            'Studio Coach is offline. Connect your AI key in Settings → Integrations to enable real-time coaching.',
-        },
-      ])
+      setMessages(m =>
+        m.map(m2 =>
+          m2.id === replyId
+            ? {
+                ...m2,
+                content:
+                  'Studio Coach is offline. Connect your AI key in Settings → Integrations to enable real-time coaching.',
+              }
+            : m2,
+        ),
+      )
     } finally {
       setIsLoading(false)
     }
@@ -203,25 +226,22 @@ export default function StudioCoach() {
                       : 'bg-surface-container-high border border-outline-variant text-on-surface-variant'
                   }`}
                 >
-                  {msg.content}
+                  {msg.content === '' && msg.role === 'assistant' ? (
+                    <div className="flex gap-1.5 items-center h-4">
+                      {[0, 1, 2].map(i => (
+                        <div
+                          key={i}
+                          className="w-1.5 h-1.5 rounded-full bg-neon-amber animate-pulse"
+                          style={{ animationDelay: `${i * 0.15}s` }}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    msg.content
+                  )}
                 </div>
               </div>
             ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-surface-container-high border border-outline-variant px-4 py-3 rounded-lg">
-                  <div className="flex gap-1.5 items-center">
-                    {[0, 1, 2].map(i => (
-                      <div
-                        key={i}
-                        className="w-1.5 h-1.5 rounded-full bg-neon-amber animate-pulse"
-                        style={{ animationDelay: `${i * 0.15}s` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
             <div ref={bottomRef} />
           </div>
 
