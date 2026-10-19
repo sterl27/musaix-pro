@@ -15,6 +15,7 @@ const EXPERTISE_AREAS = [
   { id: 8, title: 'MIDI Effects', desc: 'Arpeggiator, Chord & Scale' },
   { id: 9, title: 'Network Sync', desc: 'Ableton Link & Collaboration' },
   { id: 10, title: 'Hardware Integration', desc: 'External Instruments & CV' },
+  { id: 11, title: 'Suno Integration', desc: 'Stems export → Ableton import' },
 ]
 
 const MODES = [
@@ -30,7 +31,7 @@ const INITIAL_MESSAGE: Message = {
   id: 'init',
   role: 'assistant',
   content:
-    'Ableton Live 12 Coach is online. Ask me about arrangement, mixing, Max for Live, Push, routing, or performance setup.',
+    'Ableton Live 12 Coach is online. Ask me about arrangement, mixing, Max for Live, Push, routing, performance setup, or Suno stem import workflow.',
 }
 
 function Waveform({ active }: { active: boolean }) {

@@ -4,6 +4,7 @@ const navItems = [
   { to: '/dashboard',    icon: 'dashboard',               label: 'Dashboard' },
   { to: '/resonance',    icon: 'graphic_eq',              label: 'Resonance' },
   { to: '/coach',        icon: 'psychology',              label: 'Studio Coach' },
+  { to: '/suno',         icon: 'auto_awesome',            label: 'Suno Workflow' },
   { to: '/ecosystem',    icon: 'settings_input_component', label: 'Ecosystem' },
   { to: '/discover',     icon: 'music_note',              label: 'Discover' },
   { to: '/production',   icon: 'tune',                    label: 'Production' },

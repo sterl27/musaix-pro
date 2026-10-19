@@ -2,6 +2,7 @@ import type { ReactElement } from 'react'
 import LandingPage from '../pages/LandingPage'
 import ResonanceLive from '../pages/ResonanceLive'
 import StudioCoach from '../pages/StudioCoach'
+import SunoWorkflow from '../pages/SunoWorkflow'
 import Dashboard from '../pages/Dashboard'
 import AudioEcosystem from '../pages/AudioEcosystem'
 import MusicDiscovery from '../pages/MusicDiscovery'
@@ -29,6 +30,7 @@ export const appRoutes: AppRoute[] = [
   { path: '/dashboard', element: <Dashboard />, group: 'app' },
   { path: '/resonance', element: <ResonanceLive />, group: 'app' },
   { path: '/coach', element: <StudioCoach />, group: 'app' },
+  { path: '/suno', element: <SunoWorkflow />, group: 'app' },
   { path: '/ecosystem', element: <AudioEcosystem />, group: 'app' },
   { path: '/discover', element: <MusicDiscovery />, group: 'app' },
   { path: '/production', element: <ProductionBoard />, group: 'app' },
