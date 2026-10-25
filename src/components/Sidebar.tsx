@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 
 const navItems = [
+  { to: '/assistant', icon: 'smart_toy', label: 'Alic3X' },
   { to: '/dashboard',    icon: 'dashboard',               label: 'Dashboard' },
   { to: '/ecosystem',    icon: 'settings_input_component', label: 'Ecosystem' },
   { to: '/discover',     icon: 'music_note',              label: 'Discover' },

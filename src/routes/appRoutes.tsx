@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react'
 import LandingPage from '../pages/LandingPage'
 import Dashboard from '../pages/Dashboard'
+import Alic3X from '../pages/Alic3X'
 import AudioEcosystem from '../pages/AudioEcosystem'
 import MusicDiscovery from '../pages/MusicDiscovery'
 import ProductionBoard from '../pages/ProductionBoard'
@@ -23,6 +24,7 @@ export interface AppRoute {
 }
 
 export const appRoutes: AppRoute[] = [
+  { path: '/assistant', element: <Alic3X />, group: 'app' },
   { path: '/', element: <LandingPage />, group: 'public' },
   { path: '/dashboard', element: <Dashboard />, group: 'app' },
   { path: '/ecosystem', element: <AudioEcosystem />, group: 'app' },
